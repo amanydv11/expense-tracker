@@ -39,7 +39,7 @@ cd expense-tracker
 ### 2. Connection string 
 - First Install all the  dependencies  
 - Make a connection string on mongodb and add in the env file to connect the database.
-
+- Please refresh the page on starting the server to see the changes.
 
 ```bash
 
