@@ -470,7 +470,7 @@ export default function TransactionsPage() {
               No transactions found
             </p>
             <p>
-              Click "Add Transaction" to record your first transaction
+              Click Add Transaction to record your first transaction
             </p>
           </CardContent>
         </Card>
