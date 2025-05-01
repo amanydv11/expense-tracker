@@ -3,59 +3,53 @@ import mongoose from 'mongoose';
 const budgetSchema = new mongoose.Schema({
   category: {
     type: String,
-    required: [true, 'Category is required'],
-    enum: ['food', 'transportation', 'shopping', 'entertainment', 'other'],
+    required: true,
+    trim: true
   },
   amount: {
     type: Number,
-    required: [true, 'Amount is required'],
-    min: [0, 'Amount cannot be negative'],
+    required: true,
+    min: 0
   },
   period: {
     type: String,
-    required: [true, 'Period is required'],
-    enum: ['monthly', 'yearly'],
-    default: 'monthly',
+    required: true,
+    enum: ['daily', 'weekly', 'monthly', 'yearly']
   },
   startDate: {
     type: Date,
-    required: [true, 'Start date is required'],
-    default: Date.now,
+    required: true
   },
   endDate: {
     type: Date,
-    required: [true, 'End date is required'],
+    required: true
   },
   description: {
     type: String,
-    trim: true,
+    trim: true
   },
   status: {
     type: String,
     enum: ['active', 'completed', 'cancelled'],
-    default: 'active',
+    default: 'active'
   }
 }, {
-  timestamps: true,
+  timestamps: true
 });
 
-// Create indexes for better query performance
 budgetSchema.index({ category: 1 });
 budgetSchema.index({ startDate: -1 });
 budgetSchema.index({ status: 1 });
 
-// Virtual for checking if budget is active
 budgetSchema.virtual('isActive').get(function() {
   const now = new Date();
   return this.status === 'active' && now >= this.startDate && now <= this.endDate;
 });
 
-// Method to check if budget is exceeded
 budgetSchema.methods.isExceeded = async function(actualAmount) {
   return actualAmount > this.amount;
 };
 
-// Static method to get active budgets
 budgetSchema.statics.getActiveBudgets = function() {
   const now = new Date();
   return this.find({

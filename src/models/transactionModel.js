@@ -31,35 +31,35 @@ const transactionSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Virtual for color based on transaction type
+
 transactionSchema.virtual('color').get(function() {
   return this.type === 'income' ? 'text-green-600' : 'text-red-600';
 });
 
-// Method to format amount with sign
+
 transactionSchema.methods.formatAmount = function() {
   return this.type === 'income' ? `+₹${this.amount.toFixed(2)}` : `-₹${this.amount.toFixed(2)}`;
 };
 
-// Create indexes for better query performance
+
 transactionSchema.index({ date: -1 });
 transactionSchema.index({ category: 1 });
 transactionSchema.index({ type: 1 });
 transactionSchema.index({ paymentMethod: 1 });
 
-// Virtual for formatted date
+
 transactionSchema.virtual('formattedDate').get(function() {
   return this.date.toLocaleDateString();
 });
 
-// Method to check if transaction is recent (within last 24 hours)
+
 transactionSchema.methods.isRecent = function() {
   const now = new Date();
   const diff = now - this.date;
-  return diff <= 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  return diff <= 24 * 60 * 60 * 1000; 
 };
 
-// Static method to get transactions by date range
+
 transactionSchema.statics.getByDateRange = function(startDate, endDate) {
   return this.find({
     date: {
@@ -69,7 +69,7 @@ transactionSchema.statics.getByDateRange = function(startDate, endDate) {
   }).sort({ date: -1 });
 };
 
-// Static method to get total amount by category
+
 transactionSchema.statics.getTotalByCategory = function(startDate, endDate) {
   return this.aggregate([
     {
@@ -89,7 +89,7 @@ transactionSchema.statics.getTotalByCategory = function(startDate, endDate) {
   ]);
 };
 
-// Static method to get monthly totals
+
 transactionSchema.statics.getMonthlyTotals = function(year) {
   return this.aggregate([
     {

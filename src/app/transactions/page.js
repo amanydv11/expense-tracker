@@ -202,24 +202,7 @@ export default function TransactionsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-5xl font-bold flex justify-center items-center font-serif text-green-500 ">Expense-Tracker</h1>
-      <div className="flex justify-between items-center mt-2 mb-8">
-        <div className="gap-4">
-          <div className="flex gap-2">
-            <Link href="/dashboard">
-              <Button variant="outline" size="lg" className="flex items-center gap-2 hover:bg-gray-300 hover:text-black cursor-pointer">
-                <LayoutDashboard className="w-5 h-5" />
-               My Dashboard
-              </Button>
-            </Link>
-            <Link href="/budgets">
-              <Button variant="outline" size="lg" className="flex items-center gap-2 hover:bg-gray-300 hover:text-black cursor-pointer">
-                <PiggyBank className="w-5 h-5" />
-                Create Budget
-              </Button>
-            </Link>
-          </div>
-        </div>
+     <div className="flex justify-end items-center mt-2 mb-8">
         {!showForm && (
           <Button
             onClick={() => setShowForm(true)}

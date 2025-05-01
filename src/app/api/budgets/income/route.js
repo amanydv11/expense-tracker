@@ -6,8 +6,6 @@ export async function POST(request) {
   try {
     await connectDB();
     const body = await request.json();
-
-    // Validate required fields
     if (!body.amount || !body.category || !body.date) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -22,12 +20,9 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
-    // Find or create budget for the category
     let budget = await Budget.findOne({ category: body.category });
     
     if (!budget) {
-      // Create new budget if it doesn't exist
       budget = await Budget.create({
         category: body.category,
         amount: 0,
@@ -36,8 +31,6 @@ export async function POST(request) {
         year: new Date(body.date).getFullYear()
       });
     }
-
-    // Update budget amount
     budget.amount += amount;
     await budget.save();
 

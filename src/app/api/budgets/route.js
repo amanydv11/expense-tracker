@@ -1,49 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/dbconnect';
-import mongoose from 'mongoose';
-
-// Budget Schema
-const budgetSchema = new mongoose.Schema({
-  category: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  amount: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  period: {
-    type: String,
-    required: true,
-    enum: ['daily', 'weekly', 'monthly', 'yearly']
-  },
-  startDate: {
-    type: Date,
-    required: true
-  },
-  endDate: {
-    type: Date,
-    required: true
-  },
-  description: {
-    type: String,
-    trim: true
-  },
-  status: {
-    type: String,
-    enum: ['active', 'completed', 'cancelled'],
-    default: 'active'
-  }
-}, {
-  timestamps: true
-});
-
-// Create model if it doesn't exist
-const Budget = mongoose.models.Budget || mongoose.model('Budget', budgetSchema);
-
-// GET /api/budgets
+import Budget from '@/models/budgetModel';
 export async function GET(request) {
   try {
     await connectDB();
@@ -51,8 +8,6 @@ export async function GET(request) {
     const category = searchParams.get('category');
     const status = searchParams.get('status');
     const period = searchParams.get('period');
-
-    // Build query
     const query = {};
     if (category) query.category = category;
     if (status) query.status = status;
@@ -71,21 +26,16 @@ export async function GET(request) {
   }
 }
 
-// POST /api/budgets
 export async function POST(request) {
   try {
     await connectDB();
     const body = await request.json();
-
-    // Validate required fields
     if (!body.category || !body.amount || !body.period || !body.startDate || !body.endDate) {
       return NextResponse.json(
         { error: 'Category, amount, period, startDate, and endDate are required' },
         { status: 400 }
       );
     }
-
-    // Validate dates
     const startDate = new Date(body.startDate);
     const endDate = new Date(body.endDate);
 
@@ -102,8 +52,6 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
-    // Check for overlapping budgets in the same category
     const overlappingBudget = await Budget.findOne({
       category: body.category,
       status: 'active',
@@ -131,8 +79,6 @@ export async function POST(request) {
     );
   }
 }
-
-// PUT /api/budgets
 export async function PUT(request) {
   try {
     await connectDB();
@@ -145,8 +91,6 @@ export async function PUT(request) {
         { status: 400 }
       );
     }
-
-    // Validate dates if provided
     if (body.startDate && body.endDate) {
       const startDate = new Date(body.startDate);
       const endDate = new Date(body.endDate);
@@ -187,8 +131,6 @@ export async function PUT(request) {
     );
   }
 }
-
-// DELETE /api/budgets
 export async function DELETE(request) {
   try {
     await connectDB();

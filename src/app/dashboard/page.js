@@ -75,15 +75,6 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-7xl flex justify-center font-serif font-bold text-amber-900">My Dashboard</h1>
-      <div className="mb-8">
-        <Link href="/">
-          <Button variant="outline" size="lg" className="flex items-center gap-2 cursor-pointer hover:bg-gray-300 hover:text-black">
-            <Home className="w-5 h-5" />
-            Home
-          </Button>
-        </Link>
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Card className="bg-muted">
           <CardContent className="p-6">

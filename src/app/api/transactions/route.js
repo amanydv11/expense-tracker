@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/dbconnect';
 import Transaction from '@/models/transactionModel';
 
-// GET /api/transactions
+
 export async function GET(request) {
   try {
     await connectDB();
@@ -14,7 +14,7 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get('limit')) || 100;
     const summary = searchParams.get('summary');
 
-    // If summary is requested
+
     if (summary === 'true') {
       if (!startDate || !endDate) {
         return NextResponse.json(
@@ -60,7 +60,7 @@ export async function GET(request) {
       return NextResponse.json(summaryData);
     }
 
-    // Regular transaction query
+
     const query = {};
     if (category) query.category = category;
     if (type) query.type = type;
@@ -80,13 +80,13 @@ export async function GET(request) {
   }
 }
 
-// POST /api/transactions
+
 export async function POST(request) {
   try {
     await connectDB();
     const body = await request.json();
 
-    // Validate required fields
+
     if (!body.amount || !body.description || !body.category || !body.type) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -94,7 +94,6 @@ export async function POST(request) {
       );
     }
 
-    // Validate transaction type
     if (!['income', 'expense'].includes(body.type)) {
       return NextResponse.json(
         { error: 'Invalid transaction type. Must be either income or expense' },
@@ -102,7 +101,7 @@ export async function POST(request) {
       );
     }
 
-    // Format amount based on type
+
     const amount = parseFloat(body.amount);
     if (isNaN(amount) || amount <= 0) {
       return NextResponse.json(
@@ -111,7 +110,7 @@ export async function POST(request) {
       );
     }
 
-    // Create transaction with formatted amount
+
     const transaction = await Transaction.create({
       ...body,
       amount,
@@ -125,7 +124,7 @@ export async function POST(request) {
   }
 }
 
-// PUT /api/transactions
+
 export async function PUT(request) {
   try {
     await connectDB();
@@ -139,7 +138,7 @@ export async function PUT(request) {
       );
     }
 
-    // Format amount if it's being updated
+ 
     if (body.amount) {
       const amount = parseFloat(body.amount);
       if (isNaN(amount) || amount <= 0) {
@@ -170,7 +169,7 @@ export async function PUT(request) {
   }
 }
 
-// DELETE /api/transactions
+
 export async function DELETE(request) {
   try {
     await connectDB();

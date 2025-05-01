@@ -25,8 +25,6 @@ export default function BudgetsPage() {
     description: ''
   });
   const [transactions, setTransactions] = useState([]);
-
-  // Fetch budgets and categories
   useEffect(() => {
     fetchData();
   }, []);
@@ -59,8 +57,6 @@ export default function BudgetsPage() {
       setLoading(false);
     }
   };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -89,8 +85,6 @@ export default function BudgetsPage() {
       setError(err.message);
     }
   };
-
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -98,8 +92,6 @@ export default function BudgetsPage() {
       [name]: value
     }));
   };
-
-  // Handle budget deletion
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this budget?')) return;
 
@@ -114,8 +106,6 @@ export default function BudgetsPage() {
       setError(err.message);
     }
   };
-
-  // Prepare chart data for budget vs actual comparison
   const prepareChartData = () => {
     return budgets.map(budget => {
       const actualSpent = transactions
@@ -130,8 +120,6 @@ export default function BudgetsPage() {
       };
     });
   };
-
-  // Calculate spending insights
   const calculateInsights = () => {
     const insights = [];
     
@@ -166,18 +154,7 @@ export default function BudgetsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-5xl flex justify-center font-serif underline font-bold">Your Budgets</h1>
-        <div>
-          <Link href="/">
-            <Button variant="outline" size="lg" className="flex items-center gap-2 hover:bg-gray-300 hover:text-black cursor-pointer">
-              <Home className="w-5 h-5" />
-              Go to Home
-            </Button>
-          </Link>
-        </div>
       </div>
-
-      {/* Budget vs Actual Comparison Chart */}
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Your Budget vs Spending</CardTitle>
@@ -333,7 +310,6 @@ export default function BudgetsPage() {
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Spending Insights</CardTitle>
-          <CardDescription>Analysis of your budget usage</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -364,8 +340,6 @@ export default function BudgetsPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Budgets List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {budgets.map(budget => (
           <Card key={budget._id} className="bg-muted">

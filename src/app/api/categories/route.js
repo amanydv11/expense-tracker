@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/dbconnect';
 import mongoose from 'mongoose';
 
-// Predefined categories
+
 const DEFAULT_CATEGORIES = [
   { name: 'food', icon: '🍔', color: '#FF6B6B' },
   { name: 'transportation', icon: '🚗', color: '#4ECDC4' },
@@ -11,7 +11,7 @@ const DEFAULT_CATEGORIES = [
   { name: 'other', icon: '📦', color: '#6C5CE7' }
 ];
 
-// Category Schema
+
 const categorySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -31,10 +31,10 @@ const categorySchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Create model if it doesn't exist
+
 const Category = mongoose.models.Category || mongoose.model('Category', categorySchema);
 
-// Initialize categories if they don't exist
+
 async function initializeCategories() {
   try {
     const count = await Category.countDocuments();
@@ -47,7 +47,7 @@ async function initializeCategories() {
   }
 }
 
-// GET /api/categories
+
 export async function GET() {
   try {
     await connectDB();
@@ -63,13 +63,13 @@ export async function GET() {
   }
 }
 
-// POST /api/categories
+
 export async function POST(request) {
   try {
     await connectDB();
     const body = await request.json();
 
-    // Validate required fields
+  
     if (!body.name || !body.icon || !body.color) {
       return NextResponse.json(
         { error: 'Name, icon, and color are required' },
@@ -77,7 +77,7 @@ export async function POST(request) {
       );
     }
 
-    // Check if category already exists
+
     const existingCategory = await Category.findOne({ name: body.name });
     if (existingCategory) {
       return NextResponse.json(
@@ -96,7 +96,7 @@ export async function POST(request) {
   }
 }
 
-// PUT /api/categories
+
 export async function PUT(request) {
   try {
     await connectDB();
@@ -132,7 +132,7 @@ export async function PUT(request) {
   }
 }
 
-// DELETE /api/categories
+
 export async function DELETE(request) {
   try {
     await connectDB();
@@ -146,7 +146,7 @@ export async function DELETE(request) {
       );
     }
 
-    // Check if category is one of the default categories
+  
     const category = await Category.findById(id);
     if (!category) {
       return NextResponse.json(
